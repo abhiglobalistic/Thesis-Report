@@ -14,20 +14,24 @@ The data collected from different sources, not only from digitization or human i
 Machine learning is exponentially growing at the moment with big tech giants using machine learning to there everyday operations and processes. Large firms like Google and Microsoft have invested heavily in the research towards machine learning and providing machine learning as a service to the public. Due to advances in the domain of machine learning even a beginner in the field can easily build a model i.e the ease of usage with machine learning libraries has come to a great advantage in reducing production and execution time for constructing a model out of the data. Rapid exploration towards data-science has given a boost to the community in developing simpler and efficient ML libraries for use. Still in order to build a efficient production ready models out of available data one has to spend a considerable amount of time analyzing the features of the data and evaluating the combination of parameters and hyper-parameters for the particular model which they are trying to build. 
 
 \section{Motivation}
-In the work-flow of Machine learning process one has to decide on what features to use from the samples of data, which processing methods to employ and which combination of parameters for the algorithm would be optimal. The time taken for these steps is sometimes greater than the training/learning time of the algorithm itself. 
+In the work-flow of any Machine learning process one has to decide on what features to use from the samples of data, which processing methods to employ and which combination of parameters for the algorithm would be optimal. The time taken for these steps is sometimes greater than the training/learning time of the algorithm itself. 
 Analyzing the performance of a classifier over a range of features and hyper-parameters is an exhaustive task, for every algorithm there are parameters  which is utilized during the learning process, several combinations of these parameters produce different outcomes, it can be poor or more efficient compared to other combinations. Manually comparing these combination of parameters is not practical if the algorithm has too many parameters to tune. Several approaches addressed these problems with Exhaustive search of parameter combinations and brute-force techniques. These approaches are expensive in computation since it takes a lot of time to arrive at a optimal combination of parameters for any given algorithm. To address these problems Automatic machine learning which is end-to-end automation of the complete work-flow of machine learning has emerged recently, termed as AutoML\cite{autoML} it helps by providing a automated process for pre-processing methods,selecting features and hyper-parameters based on techniques namely Bayesian optimization and genetic programming. It also provides testing ground for non-machine learning experts to start of with machine learning and for a domain expert gives enough time to concentrate more on the important aspects of the pipeline/work-flow. AutoML can also be used as a out of the box application in building machine learning model.
 
 With the python implementation of the above methods already being implemented, one has to just find the required data-set provide it has the input to these libraries, the entire ML process optimization's will be carried out and a model with optimal configuration will be produced.
 In order to understand which method is efficient we need to employ a evaluation for the outcome and describe the performance statistically. Here we will asses the performance of these two libraries based on there generated models accuracy,f1-score for classification tasks and rmse score for regression tasks. \textbf{[write more on metrics and why u choose accuracy ]}
 
-SMAC\cite{smac-2017} stands for Sequential Model-based Algorithm Configuration, it is a tool for algorithm configuration using Bayesian Optimization and simple racing mechanism this has been employed in Autosklearn\cite{autosklearn} to automate the process of finding optimal cost effective functions. The algorithm optimizes the given function based on the cost specified the cost can be run-time or number of steps also based on the memory usage and several other criterion's \textbf{[write short lines for genetic programming]}
+SMAC\cite{smac-2017} stands for Sequential Model-based Algorithm Configuration, it is a tool for algorithm configuration using Bayesian Optimization and simple racing mechanism this has been employed in Autosklearn\cite{autosklearn} to automate the process of finding optimal cost effective functions. The algorithm optimizes the given function based on the cost specified, the cost can be run-time or number of steps also based on the memory usage and several other criterion's. Detailed explanation of the algorithm will be followed in the upcoming chapters \textbf{[write short lines for genetic programming]}
+
+TPOT
+
+
 
 
 With Autosklearn\footnote{\url{https://automl.github.io/auto-sklearn/stable/}} and TPOT\footnote{\url{https://github.com/EpistasisLab/tpot}} having these methods employed we are interested to find out what these libraries can offer to an expert or a novice. The main aim of this thesis is to evaluate the statistical significance between the results of their respective models which has been generated from the Bayesian and genetic approach and also concluding with which library is efficient in handling the vast search space of parameters. The evaluation would be aided by a web interface where all the experimental results and there statistical significance can be observed by an expert and a novice
 
 
 
-In this thesis paper I am going to evaluate two open-source machine learning libraries called Auto-sklearn\cite{autosklearn} and TPOT\cite{tpot}. The main evaluation critirion being the runtime of the respective
+In this thesis paper evaluation of  two open-source machine learning libraries called Auto-sklearn\cite{autosklearn} and TPOT\cite{tpot} are considered. The main evaluation criterion being the run time of the respective library along with the accuracy and f1-score for classification tasks and root mean squared error rate for regeression tasks. 
 General Requirements to the thesis:
 
 \begin{itemize}
@@ -46,13 +50,59 @@ R1.\label{point:R1} Performance evaluation of supervised classification experime
 
 R2.\label{point:R2} Statistical significance test between the two models from the accumulated model's performance measures
 
-R2.\label{point:R3} A web interface for visual representation of the experiments
+R3.\label{point:R3} A web interface for visual representation of the experiments
+
+In the first research question the outcome of the two libraries would be assessed based on the experiments using supervised data-sets. Bayesian optimization and genetic programming search methodology will be utilized to generate models. The obtained model its parameters and hyper-parameters will be saved to the database for further analysis
+
+With the accumulated performance measures from each experiment a statistical significance test will be carried out to understand the distribution among the two outcomes i.e the difference between the outcome of each model with the counterpart
+
+In order to efficiently analyze a set of experiments and to aid re-usability a visual aid would be of great help. The experimental results with all the attributes and the properties gained from the tasks are saved to the database so that it can be analyzed visually. The 3rd research question would tackle this task. A simple web interface for comparison of the model's behaviour will be built to aid further explanations from the data.
+
+\section{Approach}
+\textbf{Cite bayesian and genetic papers here}
+
+
+The work in this thesis involves evaluating the two machine learning libraries Autosklearn\footnote{\url{https://automl.github.io/auto-sklearn/stable/}} and TPOT\footnote{\url{https://github.com/EpistasisLab/tpot}} which are open source ML computation tools developed based on the methodologies of Bayesian Optimization \textbf{cite here} and Genetic Programming \textbf{cite here}. There are two different criterion's of evaluation, First is the performance evaluation of the models generated by the two libraries using classification and regression metrics such as accuracy and rmse scores, second is the statistical significance test of the distribution of the performance scores using spearmanr test available from scipy\footnote{\url{https://www.scipy.org/getting-started.html}} library. finally a web-gui is built using python DASH framework\footnote{\url{https://dash.plot.ly/}} which aids in visual inspection of the different parameters obtained from the models generated.
+
+The experiments are supervised classification and regression tasks, variety of data-sets are used to run the experiments from the Penn Machine Learning Benchmarks\cite{plmb} data-sets which is a open source api providing the curated set of data-sets to easily fetch and perform supervised machine learning tasks. The approach consists of two parts, one is the evaluation of the supervised ML experiments second is the development of web framework for visual analysis
+
+\subsection{Procedure}
+
+\begin{itemize}
+    \item Collection of datasets
+\begin{itemize}
+    \item 20 datasets of classification and regression tasks are collected from the different open source ML data providers one of them being Penn Machine Learning Benchmarks\footnote{\url{https://github.com/EpistasisLab/penn-ml-benchmarks}} 
+    \item Each dataset has more than 1000 datapoints/instances 
+    \item Datasets include multiclass,multilabel and binary data
+\end{itemize}
+
+    \item Data preprocessing 
+    \begin{itemize}
+        \item A small window of data preprocessing is done on the acquired data-sets for checking null values and encoding issues, since the two libraries tackle missing values within the process and the data-sets which are acquired are already in the stable state except for few which needs data preprocessing.
+    \end{itemize}
+    
+    \item Running experiments
+    \begin{itemize}
+        \item The default settings of the libraries will be used for the experiments for fair performance comparison
+    \end{itemize}
+    
+    \item Curating the results
+    \begin{itemize}
+        \item Each tool-kit's outcome will be saved in the database such as its accuracy and rmse score together with the gained model parameters and corresponding hyper-parameters
+    \end{itemize}
+    
+    \item Statistical significance test
+    \begin{itemize}
+        \item The generated models from autosklearn and tpot will be analyzed for there distribution of performance scores on a simple hypothesis
+    \end{itemize}
 
 
 
+
+
+\end{itemize}
 \section{Structure of the Thesis}
 
-Explain the structure of the thesis. 
 
 
 \section{Example citation \& symbol reference}\label{sec:citation}
