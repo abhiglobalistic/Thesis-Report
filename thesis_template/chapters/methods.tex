@@ -1,2 +1,76 @@
-\chapter{Methods}\label{chap:methods}
+\chapter{Methodology}\label{chap:methods}
+
+This section of the report will explain in detail about the steps taken in implementing the approach of this thesis, granular explanation of the methodologies , tools and libraries used for the implementation of the evaluation framework and web-interface will be described in detail. Methods contain two parts of  implementations, first is the Automatic Machine learning evaluation framework implementation second is the web-interface implementation. python\footnote{\url{https://docs.python.org/3/}} programming language version 3 was used in buildling both the implementations, database for the accumulation of results and DASH framework\footnote{\url{https://dash.plot.ly/}} was used in designing the web-interface
+
+The main aim of this thesis is to evaluate the performance of the two Automatic machine learning libraries Autosklearn and Tpot, This section starts with implementation details of the main aim of the thesis that is evaluation framework followed by the web-interface implementation.
+
+\subsection{Evaluation framework}
+
+\subsubsection{Evaluation Criteria}
+Comparison study involves many different attributes depending on the candidate considered for the comparison, in context of this thesis if we are comparing two different machine learning algorithms based on there performance. the performance metric would be the main attribute of comparison, similarly if we are trying to compare the two algorithms based on there use of CPU time and memory the main attribute of comparison would be the run time of the algorithms and the ram usage during execution. Likewise there are different methodologies of evaluation in every domain, in order to form a framework of evaluation one has to decide on these attributes or the criterion's for evaluation, one such criteria for evaluating the two machine learning libraries is the performance criteria along with the run-time of these libraries, so the main attribute here would be the performance metrics, 
+
+Further performance metrics has several types of measurements to choose from, again it depends on the task type at hand if we are evaluating the performance of an algorithm on a supervised classification or regression task the measurements would be accuracy,f1-score for classification and rmse score for regression tasks.
+\begin{itemize}
+    \item Choosing the performance metric other than accuracy
+    \begin{itemize}
+        
+        \item With any classification tasks the datasets contains several instances, each instance will be mapped to a class or a label also called as target variable. The value of the target variable contains the name of a particular entity where the instance belongs to that named entity, for example with the tumors dataset each instance will contain the class variable value as \blockquote{malignant} or \blockquote{benign} the target value will define where does the each instance belongs to from analyzing the features, here this is a simple classification task where if we employ a algorithm to learn from the instances and predict if the person has malignant or benign tumor, the algorithm would predict accordingly from the features available in the dataset, to measure the no of correct predictions which the algorithm makes the metric accuracy is used , model prediction accuracy is defined has the no of predictions made correctly divided by the total no of predictions made, with accuracy there is a drawback, the accuracy measure does not take into account the imbalance of class/target values. With this drawback we need to consider other performance metrics for classification task such as f1-score,precision-recall scores. The detail explanation of how accuracy and other performance metrics are measured is described in the background section of this paper.
+
+    \end{itemize}
+    
+    
+    
+    \item Autosklearn Methodology
+    
+    \begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=1.1\linewidth]{thesis_template/images/autosklearn.png}
+    	\caption{Autosklearn Workflow}
+    	\captionsource{source:fig 1 in \cite{autosklearn}}
+    	\label{fig:autosklearn_workflow}
+    \end{figure}
+    
+    \begin{itemize}
+        \item The workflow of Autosklearn\footnote{\url{https://automl.github.io/auto-sklearn/stable/}} is described in the fig : \ref{autosklearn_workflow} as we can see the typical ML framework is optimized with Bayesian optimizer, before the bayesian optimization process a meta-learning step to warm-start the bayesian optimizer is added as discussed in the paper \cite{autosklearn}. The meta-learning step is composed of different dataset's meta-features, these meta-features are computed from 140 datasets collected from openml platform \cite{OpenML2013}. The meta-features are computed by bayesian optimization selecting the best emperical performance from a dataset, for every dataset a ML framework instance is saved. These instances are used as a warm-start as mentioned before, the bayesian otimizer uses these instances on every run whenever a new dataset has been given, for the given dataset a certain algorithm can perform better than other algorithms, for the bayesian optimizer before the start of the optimization process certain ML instances which are saved are fed for the first round of iterations, this will give a warm start behaviour for the optimizer to look for optimal search spaces before hand.
+        
+        The Bayesian optimizer builds a probabilistic model at first to measure the performance with a set of hyperparameters, based on this models performance the optimizer will then select optimal hyperparameter settings in the next iteration\cite{autosklearn}. In every iteration the bayesian  optimizer finds optimal hyperparameter settings based on the previous models it generated, the process continues until a threshold.
+        As we can see in figure \ref{autosklearn_workflow} The ML framework is wrapped with bayesian optimizer during this process several models would be trained and many of which will give best emperical performance. The next step in the work-flow is ensemble construction, the bayesian optimization process during its iterations does not save the models which may perform better than the best, due to this the ensemble step provides a great advantage. The models obtained during the bayesian optimization are saved and added to the ensemble of models, this final ensemble which consists of 100 different models from 15 algorithms and 110 hyperparameters\cite{autosklearn} each model will contain the combination of hyperparameters for its respective algorithm.
+        Finally the ensemble which is built is given as the end result of whole work-flow, using this ensemble we can predict with test data.
+    \end{itemize}
+    
+    \item TPOT Methodology
+    
+     \begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=1.1\linewidth]{thesis_template/images/tpot-git-workflow.png}
+    	\caption{Tpot Automatic ML Workflow}
+    	\captionsource{source: \url{https://epistasislab.github.io/tpot/}}
+    	\label{fig:tpot_git_workflow}
+    \end{figure}
+    
+    \begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=1.0\linewidth]{thesis_template/images/tpot-workflow.png}
+    	\caption{Tpot  Workflow}
+    	\captionsource{source: fig 1 in \cite{tpot}}
+    	\label{fig:tpot_workflow}
+    \end{figure}
+    
+    \begin{itemize}
+        \item Tree based pipeline optimization tool TPOT\cite{tpot} is a open source tool based on genetic programming, the main difference between tpot and autosklearn is the underlying algorithm configuration technique, with tpot its genetic programming and for autosklearn its bayesian optimization. Figure \ref{fig:tpot_workflow} describes the workflow of tpot. Comparing the methodology and primary aim of tpot, it produces a single best pipeline based on several generations of ML pipelines using Genetic programming and Pareto based optimization process where as autosklearn produces a ensemble consisting of 100 estimators.
+        Genetic programming is a well known evolutionary algorithm. Tpot uses genetic programming as implemented in DEAP\footnote{\url{https://deap.readthedocs.io/en/master/}} python package. Basic understanding of Genetic programming or genetic algorithms is  it starts of with a set of solutions to a problem which is called the initial population, the initial solutions are combined to form new solutions i.e offsprings, these new solutions are generated from technique's called as cross-over and mutation, from every mutation a better solution is generated which then again generates even better and optimal solutions. With this understanding of genetic programming, Tpot at first generates 100 solutions, each solution is a tree-based ML pipeline, these solutioins are evaluated on there balanced accuracy with Cross-validation on a given dataset. At every generation, from NSGA-II selection scheme as mentioned here\cite{tpot} tpot selects the top 20 pipelines based on there accuracy to maximize the next generations of solutions. Finally with 100 generations the process stops and produces a outcome with best optimal solution 
+        
+        In the figure \ref{fig:tpot_workflow} we can see pipeline operators modifying the features and combining them to obtain the best features, as explained in the above section operators are treated as initial solutions which get better with generations of different combination of optimal hyperparameters. In ML sense these pipeline operators are sets of different feature engineering methods and a ML algorithm at the last step of the pipeline. At every iteration from the previous solutions they update there parameters based on scores to maximize the next outcome. This process repeats for a set of 100 generations by selecting the best operators and ignoring the degrading operators from the pile to maximize prediction accuracy at every iteration, at the end of generations tpot gives out the best pipeline as stated here \cite{tpot}
+        
+    \end{itemize}
+    
+    \item Deciding on the number of Data sets and categories of data
+    
+    \begin{itemize}
+        \item The selection of datasets had to be carried out particularly for Autosklearn since it employs meta-learning where 
+    \end{itemize}
+    
+    
+    
+\end{itemize}
 
