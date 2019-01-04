@@ -76,6 +76,44 @@ The generated results from the evaluation of the autosklearn and tpot has numero
 Keeping it as a single entry point of action and rest is built on the selection. The interface is built to describe each run of the toolkit's outcome, following the ML workflow interface starts of with a list of dataset names on selecting a name rest all the attributes and values will load up for that particular dataset. Each run of the experiments and there models parameters can be accessed.
 
 \subsubsection{Choosing the web framework}
-The evaluation framework being built in Python environment, the selection of web framework tool was narrowed down to be built in the same environment to ease the development of the interface and provide flexible data communication between the scripts, DASH\footnote{\url{https://dash.plot.ly/}} framweork was selected to develop the interface, since DASH framework is built using python and gives support with building graphs and charts out of the box via easy method integration's 
-    
-    
+The evaluation framework being built in Python environment, the selection of web framework tool was narrowed down to be built in the same environment to ease the development of the interface and provide flexible data communication between the scripts, DASH\footnote{\url{https://dash.plot.ly/}} framweork was selected to develop the interface, since DASH framework is built using python and gives support with building graphs and charts out of the box via easy method integration's. The execution environment for evaluation framework and the web interface being the same that is Python running scripts and using the methods with each other was a advantage and saved a lot of time by cutting re implementation of certain methods and without the need of middle end communication framework. The analytical web framework provides variety of UI elements to choose from and handles layout styling with minimal bootstrap. One of the main time consuming process in creating a web-interface is the CSS\footnote{\url{https://en.wikipedia.org/wiki/Cascading_Style_Sheets}} styling which involves setting the layout dimensions and positioning the elements accordingly, with numerous UI elements handling the position of elements becomes tedious and it also has to resize accordingly to screen sizes. Since Dash provides a out of the box default layout and styling, this would save a lot of time in dealing with the styling of the layouts and UI elements.
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.8\linewidth]{thesis_template/images/Database_fetch.png}
+    	\caption{Fetching Records}
+    	\label{fig:fetching_records}
+        \end{figure}
+        
+
+
+
+\subsubsection{Interpreting Results }
+Figure \ref{fig:fetching_records} describes the first stage of the interface were upon selection of a dataset its records will be fetched, then the records will be processed and displayed using Dash layout rendering and html tags inside the layout. Considering future usage of the data stored in the database from the evaluation framework a certain format of attribute to values were followed in order to display the results without much processing of data when fetched from the database
+The first stage of results to display is the Dataset Description with table along with performance measures and the model details from each toolkit's outcome, here for simplicity at the beginning the following attributes are displayed in the default view
+Dataset Description tab
+\begin{itemize}
+    \item No of Instances
+    \item No of features
+    \item Type of task
+\end{itemize}
+
+Estimator tab for Autosklearn and Tpot
+\begin{itemize}
+    \item Algorithm Name
+    \item Algorithm accuracy
+    \item Runtime
+\end{itemize}
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.8\linewidth]{thesis_template/images/Default_skeleton.png}
+    	\caption{Default view skeleton}
+    	\label{fig:default_skeleton}
+        \end{figure}
+
+Figure \ref{fig:default_skeleton} describes the default view of the web interface, it consists of 4 tabs on the left side and action initiator that is the select dataset from the dropdown resides on the right side with dataset's description and 2 tabs for each toolkit below
+The second stage of the interface is to display the hyperparameters of each algorithms and its values as key-value pairs, this is done for both Autosklearn and Tpot since both the outcomes contain upto 100 models in combination with different hyperparameters. The third stage of the results are the statistical significance values were box-plots are drawn for both the toolkit's generated models
+
+
+
