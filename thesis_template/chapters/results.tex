@@ -2,3 +2,24 @@
 
 
 Describe the experimental setup, the used datasets/parameters and the experimental results achieved
+
+\section{Experimental setup and execution}
+\subsection{Datasets}
+In the first stage of the execution the datasets were collected with a small window of filtering for Autosklearn since it uses 140 of the openly available datsets in there meta-learning method. Openml\cite{OpenML2013} api was used to fetch the meta data to describe each dataset. The data sets in the table \ref{tbl:datasets} were chosen by excluding the ones listed in this paper\cite{autosklearn_supplementary}
+
+\begin{table}[]
+\label{tbl:datasets}
+\caption{Classification and Regression Datasets}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+openml\_id & Dataset name & No of Instances & No of features & No of classes & task\_type     \\ \hline
+491        & irsih        & 3               & 3              & 3             & classification \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Autosklearn and TPOT execution}
+Python version 3 and several python packages and a database was used to execute the experiments.
+The Python implementations of the libraries were used to run the experiments, the default configurations of the libraries were used except the run-time limit was set to 60 minutes. Total of 20 datasets having classification and regression tasks were executed using both the libraries sequentially. The performance of each task was recorded in the database with accuracy,f1-score and the model was saved using pickle\footnote{\url{https://docs.python.org/3/library/pickle.html}}. Due to hardware limitations Parallel execution was not possible, each library took 20 hours totalling 40 hours of execution time. The experiments produced 20 models of different algorithms and 20 scores for the respective datasets. Once the results were accumulated and storing the model files in pickle format the model were reusable without any retraining from scratch. With the reusable models, statistical significance test was conducted with the result set's of both the models. The result set was acquired by re-training the model's with 30 different splits of respective dataset which it was trained before, and resulted in 30 accuracy values for each library totalling to 60 scores. Due to refit function available in both the libraries the time taken for computing 30 repetitions was lesser than the 60 minutes.
+
+\subsection{Developing the Web Interface}
+Web interface was implemented in the same python environment as the evaluation framework which is version 3, Dash Web Analytic framework was used to build the interface. Dash provides out of the box methods for creating graphs, tables, UI elements with ease and runs under a simple web server with instant changes being reflected during developmental changes from the IDE, this feature was much helpfull while building the layout of the interface especially with styling and positioning of the UI-elements. Dynamic behaviour of the interface was easy to carry out from Dash core components module which provides callbacks for each UI-element in the simple python function defintion. Each table or graph used in the interface was re-usable hence only the underlying data had to be updated on selection of different dataset. The layout design was inspired by one of the examples provided by Dash.
