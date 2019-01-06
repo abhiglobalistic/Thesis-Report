@@ -3,23 +3,123 @@
 
 Describe the experimental setup, the used datasets/parameters and the experimental results achieved
 
+This chapter will present the experimental setup and execution of research questions of this thesis, datasets, libraries and execution environments used for this purspose, following the setup and execution, experimental results obtained will be described with visual aids.
+
 \section{Experimental setup and execution}
 \subsection{Datasets}
 In the first stage of the execution the datasets were collected with a small window of filtering for Autosklearn since it uses 140 of the openly available datsets in there meta-learning method. Openml\cite{OpenML2013} api was used to fetch the meta data to describe each dataset. The data sets in the table \ref{tbl:datasets} were chosen by excluding the ones listed in this paper\cite{autosklearn_supplementary}
 
 \begin{table}[]
 \label{tbl:datasets}
-\caption{Classification and Regression Datasets}
+
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
-openml\_id & Dataset name & No of Instances & No of features & No of classes & task\_type     \\ \hline
-491        & irsih        & 3               & 3              & 3             & classification \\ \hline
+dataset name                & instances & features & classes & task\_type     & openml\_id \\ \hline
+balance-scale                   & 625       & 5        & 3       & classification & 11         \\ \hline
+breast-cancer                   & 286       & 10       & 2       & classification & 13         \\ \hline
+diabetes                        & 768       & 9        & 2       & classification & 37         \\ \hline
+tic-tac-toe                     & 958       & 10       & 2       & classification & 50         \\ \hline
+irish                           & 500       & 6        & 2       & classification & 451        \\ \hline
+192\_vineyard                   & 52        & 4        & 2       & regression     & 713        \\ \hline
+562\_cpu\_small                 & 8192      & 13       & 2       & regression     & 735        \\ \hline
+678\_visualizing\_environmental & 111       & 4        & 2       & regression     & 736        \\ \hline
+195\_auto\_price                & 159       & 16       & 2       & regression     & 745        \\ \hline
+579\_fri\_c0\_250\_5            & 250       & 6        & 2       & regression     & 776        \\ \hline
+225\_puma8NH                    & 8192      & 9        & 2       & regression     & 816        \\ \hline
+503\_wind                       & 6574      & 15       & 2       & regression     & 847        \\ \hline
+505\_tecator                    & 240       & 125      & 2       & regression     & 851        \\ \hline
+542\_pollution                  & 60        & 16       & 2       & regression     & 882        \\ \hline
+210\_cloud                      & 108       & 8        & 2       & regression     & 890        \\ \hline
+balance-scale                   & 625       & 5        & 2       & classification & 997        \\ \hline
+vowel                           & 990       & 14       & 2       & classification & 1016       \\ \hline
+dna                             & 3186      & 181      & 3       & classification & 40670      \\ \hline
+australian                      & 690       & 15       & 2       & classification & 40981      \\ \hline
+monk1                           & 556       & 7        & 2       & classification & 333        \\ \hline
+Hill\_Valley\_without\_noise    & 1212      & 101      & 2       & classification & 1479       \\ \hline
 \end{tabular}
+\caption{Classification and Regression Datasets}
 \end{table}
 
 \subsection{Autosklearn and TPOT execution}
-Python version 3 and several python packages and a database was used to execute the experiments.
-The Python implementations of the libraries were used to run the experiments, the default configurations of the libraries were used except the run-time limit was set to 60 minutes. Total of 20 datasets having classification and regression tasks were executed using both the libraries sequentially. The performance of each task was recorded in the database with accuracy,f1-score and the model was saved using pickle\footnote{\url{https://docs.python.org/3/library/pickle.html}}. Due to hardware limitations Parallel execution was not possible, each library took 20 hours totalling 40 hours of execution time. The experiments produced 20 models of different algorithms and 20 scores for the respective datasets. Once the results were accumulated and storing the model files in pickle format the model were reusable without any retraining from scratch. With the reusable models, statistical significance test was conducted with the result set's of both the models. The result set was acquired by re-training the model's with 30 different splits of respective dataset which it was trained before, and resulted in 30 accuracy values for each library totalling to 60 scores. Due to refit function available in both the libraries the time taken for computing 30 repetitions was lesser than the 60 minutes.
+Python version 3 and several python packages and a database was used to execute the experiments. The default configurations of the libraries were used except the run-time limit was set to 60 minutes. Total of 20 datasets having classification and regression tasks were executed using both the libraries sequentially. The performance of each task was recorded in the database with accuracy,f1-score and the model was saved using pickle\footnote{\url{https://docs.python.org/3/library/pickle.html}}. Due to hardware limitations Parallel execution was not possible, each library took 20 hours totalling 40 hours of execution time. The experiments produced 20 models of different algorithms and 20 scores for the respective datasets. Once the results were accumulated and storing the model files in pickle format the model were reusable without any retraining from scratch. With the reusable models, statistical significance test was conducted with the result set's of both the models. The result set was acquired by re-training the model's with 30 different splits of respective dataset which it was trained before, and resulted in 30 accuracy values for each library totalling to 60 scores. Due to refit function available in both the libraries the time taken for computing 30 repetitions was lesser than the 60 minutes.
 
 \subsection{Developing the Web Interface}
-Web interface was implemented in the same python environment as the evaluation framework which is version 3, Dash Web Analytic framework was used to build the interface. Dash provides out of the box methods for creating graphs, tables, UI elements with ease and runs under a simple web server with instant changes being reflected during developmental changes from the IDE, this feature was much helpfull while building the layout of the interface especially with styling and positioning of the UI-elements. Dynamic behaviour of the interface was easy to carry out from Dash core components module which provides callbacks for each UI-element in the simple python function defintion. Each table or graph used in the interface was re-usable hence only the underlying data had to be updated on selection of different dataset. The layout design was inspired by one of the examples provided by Dash.
+Web interface was implemented in the same python environment as the evaluation framework which is version 3, Dash Web Analytic framework was used to build the interface. Dash provides out of the box methods for creating graphs, tables, UI elements with ease and runs under a simple web server with instant changes being reflected during developmental changes from the IDE, this feature was much help full while building the layout of the interface especially with styling and positioning of the UI-elements. Dynamic behaviour of the interface was easy to carry out from Dash core components module which provides callbacks for each UI-element in the simple python function definition. Each table or graph used in the interface was re-usable hence only the underlying data had to be updated on selection of different dataset. The layout design was inspired by one of the examples provided by Dash\footnote{\url{https://dash.plot.ly/gallery}}. 
+
+\section{Experimental Results}
+
+The first research question of this thesis \ref{point:R1} was to compare the performance of Autosklearn and Tpot, to this question we had collected 20 datasets containing classification and regression datasets, using the two libraries the tasks were executed with all the datasets, both the libraries produced 20 different models with each model having different combination of there parameters. Autosklearn produced a final ensemble and Tpot produced best pipeline with its parameter settings. Bayesian optimization and genetic algorithm search methodology is the main area of importance to the execution of finding optimal solutions in these libraries. The evaluation criteria being the balanced accuracy and f1-score for classification problems and root mean squared error rate for regression problems along with run time, the following result sets will explain which Automatic Machine learning library performed better not only in terms of  evaluation measures also with statistical significance test.
+
+\subsection{Classification tasks}
+In the table \ref{tbl:classification_tasks} from a general inspection we can  observe that model performance across the datasets are almost similar except for few models, autosklearn and tpot consecutively produced similar results on each task, we should note that each of the models are different from one another and they also have different hyperparameter configuration. The dataset monk1 has a score of 100\% through out all the measures from both the libraries, this could indicate that there might be validation with training set itself, if that is the case it should have been reproduced along other tasks as well or the dataset's distribution favours the algorithm. Autosklearn has models with less than 80\% accuracy in 3 of the tasks where as  tpot has only 2 models below 80\% this is not a huge margin difference when compared to other 2 measures, when we compute the mean of each scores we can say that the performance difference is not significant, autosklearn scores are predicted from an ensemble of models were has tpot is a single best pipeline with just one algorithm. The essential part of an ensemble is to average out the predictions from the overall predictions made this should provide a significant advantage for autosklearn but still against a single model the performance is very similar, what we can notice here is that the ensemble of models or just the single pipeline model would perform better under optimal hyperparameter configuration. By taking a general average performance across datasets tpot performs better than autosklearn in accuracy and balanced-accuracy only by a 1\% margin.
+
+\subsection{Regression tasks}
+In the table \ref{tbl:regression_tasks} describes the performance in regression tasks for both the libraries, here we can see that for the task vineyard there is a negative score which can be for root mean squared error, if we examine the reason for such a low score is due to the no of instances and features available in the dataset, there are other two datasets in which both the libraries performed very poorly. The poor performance could be from the models which are not able to obtain much information about the data and squared error gives out a huge difference, also the datasets having very few instances less than 1000, both autosklearn and tpot are unable to perform empirically. Since there is not enough data points to accumulate information the models fail to recognize changes. Overall performance across the tasks
+from both the libraries is similar and only a thin margin of score difference can be seen.
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+dataset\_name                & \multicolumn{2}{c|}{\begin{tabular}[c]{@{}c@{}}Autosklearn - Tpot\\  F1-score\end{tabular}} & \multicolumn{2}{l|}{\begin{tabular}[c]{@{}l@{}}Autosklearn - Tpot\\        Accuracy\end{tabular}} & \multicolumn{2}{l|}{\begin{tabular}[c]{@{}l@{}}Autosklearn - Tpot \\   balance-accuracy\end{tabular}} \\ \hline
+breast-cancer                & 0.694                                        & 0.708                                        & 0.694                                           & 0.666                                           & 0.672                                             & 0.692                                             \\ \hline
+diabetes                     & 0.734                                        & 0.689                                        & 0.744                                           & 0.718                                           & 0.736                                             & 0.685                                             \\ \hline
+dna                          & 0.959                                        & 0.687                                        & 0.959                                           & 0.959                                           & 0.961                                             & 0.961                                             \\ \hline
+monk1                        & 1.0                                          & 1.0                                          & 1.0                                             & 1.0                                             & 1.0                                               & 1.0                                               \\ \hline
+tic-tac-toe                  & 1.0                                          & 0.991                                        & 1.0                                             & 0.995                                           & 1.0                                               & 0.988                                             \\ \hline
+australian                   & 0.878                                        & 0.849                                        & 0.878                                           & 0.849                                           & 0.880                                             & 0.850                                             \\ \hline
+balance-scale                & 0.987                                        & 1.0                                          & 0.987                                           & 1.0                                             & 0.969                                             & 1.0                                               \\ \hline
+Hill\_Valley\_without\_noise & 0.693                                        & 1.0                                          & 0.693                                           & 1.0                                             & 0.697                                             & 1.0                                               \\ \hline
+vowel                        & 0.991                                        & 0.983                                        & 0.991                                           & 0.983                                           & 0.992                                             & 0.984                                             \\ \hline
+irish                        & 1.0                                          & 1.0                                          & 1.0                                             & 1.0                                             & 1.0                                               & 1.0                                               \\ \hline
+\end{tabular}
+\caption{Classification tasks}
+\label{tbl:classification_tasks}
+\end{table}
+
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+dataset name                    & \multicolumn{1}{c|}{Autosklearn rmse} & Tpot rmse \\ \hline
+503\_wind                       & 0.777                                 & 0.790     \\ \hline
+225\_puma8NH                    & 0.670                                 & 0.680     \\ \hline
+562\_cpu\_small                 & 0.980                                 & 0.979     \\ \hline
+195\_auto\_price                & 0.888                                 & 0.837     \\ \hline
+505\_tecator                    & 0.987                                 & 0.997     \\ \hline
+192\_vineyard                   & 0.0153                                & -0.334    \\ \hline
+579\_fri\_c0\_250\_5            & 0.950                                 & 0.944     \\ \hline
+678\_visualizing\_environmental & 0.363                                 & 0.149     \\ \hline
+542\_pollution                  & 0.317                                 & 0.022     \\ \hline
+210\_cloud                      & 0.681                                 & 0.710     \\ \hline
+\end{tabular}
+\caption{Regression tasks}
+\label{tbl:regression_tasks}
+\end{table}
+
+
+\subsection{Statistical significance}
+
+Statistical significance is an essential tool to asses the performance when comparing two different algorithms, the significance comes into picture were we need to effectively and quantitatively examine the difference between the two methods. The methods are different in the terms of there methodolgy employed, but when the goal of the methods is to maximize a function with the given costs the obtained outcomes would be similar. The outcome can be similar but how the methods reach that outcome is different in there own ideology and mechanism. When the result is achieved by the methods based on a certain criteria we only asses the methods based on the sole criteria and overlook on how the methods achieved the result, to quantify these methods the second research question in this thesis R2 \ref{point:R2} is to conduct a statistical significance test among the top performing models from both the libraries. A simple hypothesis stating "The samples of scores are correlated" is the assumption made, since the evaluation experiments are done only once a certain set of repeated samples would give us a distribution of results to examine, for this 20 repeated model training was done on 20 different splits of data finally 20 scores were obtained from the task. Table \ref{tbl:significance} has entries of classification and regression tasks which performed above 90\% from both the libraries. spearmanr\footnote{\url{https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.stats.spearmanr.html}} statistical test was used to compute the p-values of each model, the accumulated scores are not shown in the table only the p-value which is obtained from the test is displayed to describe the tasks. Out of 12 models 8 models between tpot and autosklearn values are correlated on 20 different train test splits, a alpha value of 0.05 was selected as the standard measure for p-value. The 8 models which are correlated describes the behaviour as similar for both the libraries, from comparing the performance scores in the tables \ref{tbl:classification_tasks}, \ref{tbl:regression_tasks} and as we saw the thin margin difference in there scores, statistical significance test shows that the two libraries perform similarly and this could be due to the algorithm and hyperparameter optimization from both the libraries which essentially tackled the search space on a similar scale. For the samples which are uncorrelated indicates the algorithm configuration obtained is different with other models.
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+dataset\_name        & p\_value               & significance       \\ \hline
+562\_cpu\_small      & 0.00015231             & Samples are correlated   \\ \hline
+505\_tecator         & 0.5352473458918693     & Samples are uncorrelated \\ \hline
+balance-scale        & 0.10498579026636898    & Samples are uncorrelated \\ \hline
+vowel                & 0.0052                 & Samples are correlated   \\ \hline
+195\_auto\_price     & 0.1316                 & Samples are uncorrelated \\ \hline
+225\_puma8NH         & 0.000000002            & Samples are correlated   \\ \hline
+503\_wind            & 0.000000035            & Samples are correlated   \\ \hline
+579\_fri\_c0\_250\_5 & 0.1426                 & Samples are uncorrelated \\ \hline
+australian           & 0.0003                 & Samples are correlated   \\ \hline
+breast-cancer        & 0.0012                 & Samples are correlated   \\ \hline
+diabetes             & 0.0001                 & Samples are correlated   \\ \hline
+dna                  & 0.0000511              & Samples are correlated   \\ \hline
+\end{tabular}
+\caption{Statistical Significance between tpot and autosklearn}
+\label{tbl:significance}
+\end{table}
