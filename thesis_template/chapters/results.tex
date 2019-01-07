@@ -51,11 +51,18 @@ Web interface was implemented in the same python environment as the evaluation f
 The first research question of this thesis \ref{point:R1} was to compare the performance of Autosklearn and Tpot, to this question we had collected 20 datasets containing classification and regression datasets, using the two libraries the tasks were executed with all the datasets, both the libraries produced 20 different models with each model having different combination of there parameters. Autosklearn produced a final ensemble and Tpot produced best pipeline with its parameter settings. Bayesian optimization and genetic algorithm search methodology is the main area of importance to the execution of finding optimal solutions in these libraries. The evaluation criteria being the balanced accuracy and f1-score for classification problems and root mean squared error rate for regression problems along with run time, the following result sets will explain which Automatic Machine learning library performed better not only in terms of  evaluation measures also with statistical significance test.
 
 \subsection{Classification tasks}
-In the table \ref{tbl:classification_tasks} from a general inspection we can  observe that model performance across the datasets are almost similar except for few models, autosklearn and tpot consecutively produced similar results on each task, we should note that each of the models are different from one another and they also have different hyperparameter configuration. The dataset monk1 has a score of 100\% through out all the measures from both the libraries, this could indicate that there might be validation with training set itself, if that is the case it should have been reproduced along other tasks as well or the dataset's distribution favours the algorithm. Autosklearn has models with less than 80\% accuracy in 3 of the tasks where as  tpot has only 2 models below 80\% this is not a huge margin difference when compared to other 2 measures, when we compute the mean of each scores we can say that the performance difference is not significant, autosklearn scores are predicted from an ensemble of models were has tpot is a single best pipeline with just one algorithm. The essential part of an ensemble is to average out the predictions from the overall predictions made this should provide a significant advantage for autosklearn but still against a single model the performance is very similar, what we can notice here is that the ensemble of models or just the single pipeline model would perform better under optimal hyperparameter configuration. By taking a general average performance across datasets tpot performs better than autosklearn in accuracy and balanced-accuracy only by a 1\% margin.
+\label{classficationtasks}
+In the table \ref{tbl:classification_tasks} from a general inspection we can  observe that model performance across the datasets are almost similar except for few models, autosklearn and tpot consecutively produced similar results on each task, we should note that each of the models are different from one another and they also have different hyperparameter configuration. The dataset monk1 has a score of 100\% through out all the measures from both the libraries, this could indicate that there might be validation with training set itself, if that is the case it should have been reproduced along other tasks as well or the dataset's distribution favours the algorithm. Autosklearn has models with less than 80\% accuracy in 3 of the tasks where as  tpot has only 2 models below 80\% this is not a huge margin difference when compared to other 2 measures, when we compute the mean of each scores we can say that the performance difference is not significant, autosklearn scores are predicted from an ensemble of models were has tpot is a single best pipeline with just one algorithm. The essential part of an ensemble is to average out the predictions from the overall predictions made this should provide a significant advantage for autosklearn but still against a single model the performance is very similar, what we can notice here is that the ensemble of models or just the single pipeline model would perform better under optimal hyperparameter configuration.By taking a general average performance across datasets tpot performs better than autosklearn in accuracy and balanced-accuracy only by a 1\% margin.
 
 \subsection{Regression tasks}
 In the table \ref{tbl:regression_tasks} describes the performance in regression tasks for both the libraries, here we can see that for the task vineyard there is a negative score which can be for root mean squared error, if we examine the reason for such a low score is due to the no of instances and features available in the dataset, there are other two datasets in which both the libraries performed very poorly. The poor performance could be from the models which are not able to obtain much information about the data and squared error gives out a huge difference, also the datasets having very few instances less than 1000, both autosklearn and tpot are unable to perform empirically. Since there is not enough data points to accumulate information the models fail to recognize changes. Overall performance across the tasks
 from both the libraries is similar and only a thin margin of score difference can be seen.
+
+\subsection{Algorithm preference and performance}
+Fig \ref{fig:algorithm} gives us an estimate in percentage of how many times the estimators has been selected to build a model under autosklearn and tpot for the dataset tic-tac-toe, for autosklearn its been clearly seen that adaboost and gradient boosting which are ensemble methods are selected in majority of the times, this might be due to the final outcome being an ensemble methods handling the properties of ensemble can be a better estimator. When compared across tpot gradient boosting is the dominant estimator chosen. RandomforestClassifier and extratreesClassifier are in top 5 slot of being selected to build a pipeline in tpot since both the algorithms are better at handling when stacked with other features estimators. Fig \ref{fig:performance} explains the performance of both the libraries across different metrics for a given dataset, we can observe except for few tasks the performance is near to overlapping. Some of the tasks gained negative rmse scores while in classification below 20\% accuracy can be seen, coming to the runtime of the toolkits autosklearn managed to stay within seconds of the end minute boundary where as tpot took a 30 to 60 secs extra time to stop its execution. As explained above in section \ref{classficationtasks} why the scores are low the data at hand is very important for any algorithm to get trained efficiently.
+
+
+
 \begin{table}[]
 \centering
 \begin{tabular}{|l|l|l|l|l|l|l|}
@@ -97,6 +104,22 @@ dataset name                    & \multicolumn{1}{c|}{Autosklearn rmse} & Tpot r
 \label{tbl:regression_tasks}
 \end{table}
 
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.9\linewidth]{thesis_template/images/performanceplot.png}
+    	\caption{Performance plot across metrics}
+    	\label{fig:performance}
+        \end{figure}
+        
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.8\linewidth]{thesis_template/images/pieplotBoth.png}
+    	\caption{Autosklearn and tpot estimators preference on tic-tac-toe}
+    	\label{fig:algorithm}
+        \end{figure}
+
+
 
 \subsection{Statistical significance}
 
@@ -123,3 +146,116 @@ dna                  & 0.0000511              & Samples are correlated   \\ \hli
 \caption{Statistical Significance between tpot and autosklearn}
 \label{tbl:significance}
 \end{table}
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.84\linewidth]{thesis_template/images/significance.png}
+    	\caption{Statistical significance across tasks}
+    	\label{fig:significance}
+        \end{figure}
+        
+Fig \ref{fig:significance} has the box plots of some of the models chosen from the list in the table \ref{tbl:significance} here we can see both tpot and autosklearn how they are being uncorrelated on a particular task, for example the tecator dataset there is huge difference in the distribution of scores and for balance-scale there are outliers in the distribution. Below are some of the algorithms with there hypereparameters chosen by the respective library for the particular task. The models shown below in the section \ref{auto:hyp} , \ref{tpot:hyp} are specifically selected to examine the different parameters which are responsible for the models performance.
+
+\subsection{Autosklearn algorithms with hyperparmeters}
+\label{auto:hyp}
+\begin{itemize}
+\item 
+Dataset CPU : Algorithm : \textbf{RandomForest}
+
+\begin{spverbatim}
+{'bootstrap': True, 'criterion': 'mse', 'max_depth': None, 'max_features': 1.0, 'max_leaf_nodes': None, 'min_impurity_decrease': 0.0, 
+'min_impurity_split': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'min_weight_fraction_leaf': 0.0, 'n_estimators': 100, 'n_jobs': 1, 
+'oob_score': False, 
+'verbose': 0, 'warm_start': True}
+\end{spverbatim}
+
+\item
+Dataset Balance scale : Algorithm : \textbf{ LibSVM SVC}
+\begin{spverbatim}
+{'C': 10506.07883709228, 'cache_size': 200, 'class_weight': None, 'coef0': -0.9194756791062237, 'decision_function_shape': 'ovr', 'degree': 3, 'gamma': 0.012743229122052542, 'kernel': 'sigmoid', 'max_iter': -1.0, 'probability': False, 'random_state': <mtrand.RandomState object at 0x7fab2fdad9d8>, 'shrinking': False, 'tol': 0.037066558075681134, 'verbose': False}
+\end{spverbatim}
+
+\item
+Dataset Australian : Algorithm : \textbf{LDA}
+\begin{spverbatim}
+{'n_components': 231, 'priors': None, 'shrinkage': 'auto', 'solver': 'lsqr', 'store_covariance': False, 'tol': 0.0001272335874479544}
+\end{spverbatim}
+
+\end{itemize}
+
+\subsection{Tpot algorithms with hyperparmeters}
+\label{tpot:hyp}
+\begin{itemize}
+\item 
+Dataset CPU : Algorithm : \textbf{XGBRegressor}
+\begin{spverbatim}
+{'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1, 'colsample_bytree': 1, 'gamma': 0, 'learning_rate': 0.1, 
+'max_delta_step': 0, 'max_depth': 9, 'min_child_weight': 20, 'missing': nan, 
+'n_estimators': 100, 'n_jobs': 1, 'nthread': 1, 'objective': 'reg:linear', 
+'random_state': 0, 'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 
+'seed': None, 'silent': True, 'subsample': 1.0}
+\end{spverbatim}
+
+\item
+
+Dataset Balance scale : Algorithm : \textbf{LogisticRegression}
+\begin{spverbatim}
+{'C': 10.0, 'class_weight': None, 'dual': False,'fit_intercept': True,
+'intercept_scaling': 1, 'max_iter': 100, 'multi_class': 'ovr', 'n_jobs': 1,
+'penalty': 'l2', 'random_state': None, 'solver': 'liblinear', 'tol': 0.0001, 
+'verbose': 0, 'warm_start': False}
+\end{spverbatim}
+
+\item
+
+Dataset Australian : Algorithm : \textbf{LogisticRegression}
+\begin{spverbatim}
+{'C': 20.0, 'class_weight': None, 'dual': False, 
+'fit_intercept': True,'intercept_scaling': 1, 'max_iter': 100,
+'multi_class': 'ovr', 'n_jobs': 1,'penalty': 'l1', 'random_state': None, 'solver': 'liblinear', 'tol': 0.0001,'verbose': 0, 'warm_start': False}
+\end{spverbatim}
+
+\end{itemize}
+
+\subsection{Web Interface}
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=1\linewidth]{thesis_template/images/webinterface.png}
+    	\caption{Web interface}
+    	\label{fig:webinterface}
+        \end{figure}
+
+The implementation of web interface was done in python environment using Dash framework, the layout of the interface was inspired by one of the apps in the dash gallery. The tabbed layout provides quick navigation between contexts and faster execution when compared to loading a entire different page, in order to keep the control sequence as simple as possible there is only one action point in the interface that is selection of dataset at the top right using a dropdown.
+Maintaining a flow of observations was the key base for developing the interface, in machine learning workflow were a dataset at first is examined before selecting the algorithms for building a model, here in the web interface we first analyze the dataset which is selected using the dropdown and the table on the left hand side of the page. The table displays 10 rows which is sufficient to get a general idea about the dataset. Below the select dataset dropdown we can get the details of the dataset on its properties as No of instances,features,classes and type of task for the particular datset.
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.4\linewidth]{thesis_template/images/parametersInterface.png}
+    	\caption{Parameter tab}
+    	\label{fig:parameters}
+        \end{figure}
+
+
+The first part of the interface is the action part were the user selects a dataset, the second part of the interface is to fetch the corresponding dataset details from the database. At any given point of time the whole page and tabs of the interface contains details only about the selected dataset except for the statistical significance tab which contains data on best models obtained from both the libraries, this is due to keeping the interface distraction free and only focus on that particular problem selected. Once selection is done the best models obtained from both the libraries are displayed under the select dropdown button in fig \ref{fig:webinterface}.
+The section named Evaluated results has two tabs one is for description of the models and the second parameter tab to display the hyperparameters of that particular model. The section displays each model's brief information such as algorithm,performance score and runtime as well as the hyperparameters in the parameter tab as seen in fig \ref{fig:parameters} 
+
+The Initial model details displayed is the best estimator found by both libraries, for autosklearn it is the first model in the whole final ensemble and for tpot it is the best pipeline obtained and the corresponding hyperparameters as well. The four bigger tabs on the left hand side of the page are namely, Data explorer, Autosklearn, Tpot and statistical significance.
+The data explorer tab as shown in the fig \ref{fig:webinterface} displays the rows of the dataset to examine at first, the next tab in the line Autosklearn lists the rest of the models details found in the final ensemble excluding the one which is displayed on selection of the dataset. Same ideology for tpot tab as well were the individual pipelines examined  by tpot library to find the best models at last.At last is the statistical significance tab were its not in connection with selection of dataset or any other actions performed. The tab lists the models whose performance is above 90\%  and some models with very low accuracy in the overall 20 tasks taken up by autosklearn and tpot. Fig \ref{fig:signi} is the section were outcome is represented with boxplots in fig \ref{fig:signiplots} each outcome is a collapsible container which encloses box plots and parameters of that particular model and dataset. Below the box plot, the hyperparameters for both autosklearn and tpot are listed to grab information about the task without any navigation.
+
+The data displayed in the interface is already stored in the format which would aid easier integration for display formatting. JSON\footnote{\url{https://www.json.org/}} data structure is used to save and retrieve data, the evalution framework saves data in json format to aid the web interface with minimal processing of data while displaying. The whole interface is a single page application which can also be packaged and since its written in python, execution of backend scripts can be done within the callbacks of the interface itself if required, although its not recommended to perform intensive tasks at the user interface side. The interface also does not reload at every selection of dataset, it uses AJAX\footnote{\url{https://en.wikipedia.org/wiki/Ajax_(programming)}} protocol to load data and display it without reloading the whole page.The interface can be used to gain information on different models and its parameters generated by autosklearn and tpot. Apart from being built specifically to evaluate  the two libraries, the interface can give us information on variety of hyperparameters and the combinations tested, this is from the execution of Autosklearn and Tpot.
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.9\linewidth]{thesis_template/images/statistical.png}
+    	\caption{Statistical significance tab}
+    	\label{fig:signi}
+        \end{figure}
+        
+
+\begin{figure}[!h]
+    	\centering
+    	\includegraphics[width=0.9\linewidth]{thesis_template/images/statwithgraph.png}
+    	\caption{Statistical significance tab with plots}
+    	\label{fig:signiplots}
+        \end{figure}
